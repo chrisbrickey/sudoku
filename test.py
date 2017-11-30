@@ -36,17 +36,30 @@ class SudokuTest(unittest.TestCase):
         self.assertFalse(sudoku_solve(board))
 
 
+def is_valid_board(board):
+    for row in board:
+        for cell in row:
+            if cell == ".":
+                return False
+
+    return True
+
+
 class ValidatorTest(unittest.TestCase):
 
     def test_valid_board(self):
-        board = [['3']*9 for i in range(9)]
+        board = [['3'] * 9 for i in range(9)]
         self.assertTrue(is_valid_board(board))
 
-    def test_invalid_board(self):
-        board = [['3']*9 for i in range(9)]
+    def test_invalid_board_58(self):
+        board = [['3'] * 9 for i in range(9)]
         board[5][8] = "."
         self.assertFalse(is_valid_board(board))
 
+    def test_invalid_board_12(self):
+        board = [['3'] * 9 for i in range(9)]
+        board[1][2] = "."
+        self.assertFalse(is_valid_board(board))
 # describe '#sudoku_solve' do
 #
 #   it "works1" do
