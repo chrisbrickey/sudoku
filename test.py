@@ -4,11 +4,15 @@ import unittest
 def sudoku_solve(board):
     # create a tree of possible outcomes
     # traverse the tree
-    leaf = [['3'] * 9 for i in range(9)]
-    if is_valid_board(leaf):
-        return True
-    else:
-        pass
+
+    node = {"board": [['3'] * 9 for i in range(9)], "children": []}
+    if is_valid_leaf(node):
+        leaf = node["board"]
+        if is_valid_board(leaf):
+            return True
+        else:
+            pass
+
     # return True if any leaves are complete boards
     # else return False
     return True
@@ -77,11 +81,11 @@ def is_valid_leaf(node):
 
 class LeafValidatorTest(unittest.TestCase):
 
-    def test_valid_leaf(self):
+    def test_invalid_leaf(self):
         node = {"board": 1, "children": [{"board": 2, "children": [] }, {"board": 3, "children": [] }]}
         self.assertFalse(is_valid_leaf(node))
 
-    def test_invalid_leaf(self):
+    def test_valid_leaf(self):
         node = {"board": 1, "children": []}
         self.assertTrue(is_valid_leaf(node))
 
