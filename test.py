@@ -1,20 +1,48 @@
 import unittest
 
 
-def sudoku_solve(board):
-    # create a tree of possible outcomes
-    # traverse the tree
-
-    node = {"board": [['3'] * 9 for i in range(9)], "children": []}
-    if is_valid_leaf(node):
-        leaf = node["board"]
+def dfs(tree):
+    if is_valid_leaf(tree):  # current node IS a leaf
+        leaf = tree["board"]
         if is_valid_board(leaf):
-            return True
-        else:
-            pass
+            return True  # will this stop recursion? - yes
+    else:  # current node is not a leaf
+        children = tree["children"]
+        for child in children:
+            return dfs(child)
 
-    # return True if any leaves are complete boards
-    # else return False
+    return False
+
+
+# while len(current_node["children]) > 0
+# grab a child
+# current_node = child
+
+
+def create_tree(board):
+    valid_node = {"board": [['3'] * 9 for i in range(9)], "children": []}
+    tree = {"board": [['3'] * 9 for i in range(9)], "children": [valid_node]}
+    return tree
+
+
+def sudoku_solve(board):
+    tree = create_tree(board)
+    return dfs(tree)
+
+
+def is_valid_leaf(node):
+    if len(node["children"]) == 0:
+        return True
+    else:
+        return False
+
+
+def is_valid_board(board):
+    for row in board:
+        for cell in row:
+            if cell == ".":
+                return False
+
     return True
 
 
@@ -45,15 +73,6 @@ class SudokuTest(unittest.TestCase):
         self.assertFalse(sudoku_solve(board))
 
 
-def is_valid_board(board):
-    for row in board:
-        for cell in row:
-            if cell == ".":
-                return False
-
-    return True
-
-
 class BoardValidatorTest(unittest.TestCase):
 
     def test_valid_board(self):
@@ -71,23 +90,42 @@ class BoardValidatorTest(unittest.TestCase):
         self.assertFalse(is_valid_board(board))
 
 
-def is_valid_leaf(node):
-    if len(node["children"]) == 0:
-        return True
-    else:
-        return False
-
-
-
 class LeafValidatorTest(unittest.TestCase):
 
     def test_invalid_leaf(self):
-        node = {"board": 1, "children": [{"board": 2, "children": [] }, {"board": 3, "children": [] }]}
+        node = {"board": 1, "children": [{"board": 2, "children": []}, {"board": 3, "children": []}]}
         self.assertFalse(is_valid_leaf(node))
 
     def test_valid_leaf(self):
         node = {"board": 1, "children": []}
         self.assertTrue(is_valid_leaf(node))
+
+
+class DfsTest(unittest.TestCase):
+
+    def test_dfs(self):
+        invalid_node = {"board": [['.'] * 9 for i in range(9)], "children": []}
+        invalid_tree = {"board": [['.'] * 9 for i in range(9)], "children": [invalid_node]}
+        self.assertFalse(dfs(invalid_tree))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # describe '#sudoku_solve' do
